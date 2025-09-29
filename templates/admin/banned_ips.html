@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetamiTV - Admin IP Ban Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --primary-bg: #0f0f13;
+            --secondary-bg: #1a1a22;
+            --card-bg: #23232e;
+            --accent-color: #8a2be2;
+            --accent-gradient: linear-gradient(135deg, #8a2be2, #4361ee);
+            --text-color: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --success-color: #4CAF50;
+            --error-color: #F44336;
+            --warning-color: #FFC107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 30px;
+            right: 0;
+            padding: 8px 15px;
+            background: rgba(244, 67, 54, 0.8);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(244, 67, 54, 1);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+        
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .login-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(15, 15, 19, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: var(--accent-gradient);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #F44336, #d32f2f);
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+        
+        .error-message {
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: rgba(244, 67, 54, 0.1);
+            border-left: 4px solid var(--error-color);
+            color: var(--text-color);
+        }
+        
+        .flash-message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .flash-success {
+            background-color: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .flash-error {
+            background-color: rgba(244, 67, 54, 0.1);
+            border-left: 4px solid var(--error-color);
+        }
+        
+        .ban-form {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .ban-form h2 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .ban-list {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .ban-list h2 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background-color: rgba(138, 43, 226, 0.1);
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        
+        .no-bans {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .admin-links {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .admin-link {
+            padding: 10px 20px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .admin-link:hover {
+            background-color: rgba(138, 43, 226, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .admin-link.active {
+            background-color: rgba(138, 43, 226, 0.2);
+            border-color: var(--accent-color);
+        }
+        
+        .expires-never {
+            color: var(--error-color);
+            font-weight: 600;
+        }
+        
+        .expires-soon {
+            color: var(--warning-color);
+        }
+        
+        .unban-form {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>NetamiTV Admin - IP Ban Management</h1>
+            {% if authenticated %}
+            <a href="/admin/logout" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Abmelden
+            </a>
+            {% endif %}
+        </header>
+        
+        {% if authenticated %}
+        <div class="admin-links">
+            <a href="/admin/excel" class="admin-link">
+                <i class="fas fa-table"></i> Excel Viewer
+            </a>
+            <a href="/admin/banned-ips" class="admin-link active">
+                <i class="fas fa-ban"></i> IP Ban Management
+            </a>
+        </div>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="post" action="{{ url_for('admin_ban_ip') }}" class="ban-form">
+            <h2>IP-Adresse sperren</h2>
+            
+            <div class="form-group">
+                <label for="ip_address">IP-Adresse:</label>
+                <input type="text" id="ip_address" name="ip_address" class="form-input" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="reason">Grund für die Sperrung:</label>
+                <textarea id="reason" name="reason" rows="3" class="form-input"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="duration">Dauer der Sperrung (Tage, leer lassen für permanent):</label>
+                <input type="number" id="duration" name="duration" min="1" class="form-input">
+            </div>
+            
+            <button type="submit" class="btn btn-danger btn-block">
+                <i class="fas fa-ban"></i> IP sperren
+            </button>
+        </form>
+        
+        <div class="ban-list">
+            <h2>Aktuell gesperrte IP-Adressen</h2>
+            
+            {% if banned_ips %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>IP-Adresse</th>
+                            <th>Grund</th>
+                            <th>Gesperrt am</th>
+                            <th>Läuft ab</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ban in banned_ips %}
+                            <tr>
+                                <td>{{ ban.ip }}</td>
+                                <td>{{ ban.reason }}</td>
+                                <td>{{ ban.banned_at }}</td>
+                                <td>
+                                    {% if ban.expires_at %}
+                                        <span class="expires-soon">{{ ban.expires_at }}</span>
+                                    {% else %}
+                                        <span class="expires-never">Nie</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <form method="post" action="{{ url_for('admin_unban_ip') }}" class="unban-form">
+                                        <input type="hidden" name="ip_address" value="{{ ban.ip }}">
+                                        <button type="submit" class="btn btn-secondary" onclick="return confirm('Bist du sicher, dass du diese IP entsperren möchtest?');">
+                                            <i class="fas fa-unlock"></i> Entsperren
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="no-bans">Keine gesperrten IP-Adressen gefunden.</div>
+            {% endif %}
+        </div>
+        
+        {% else %}
+            <div class="login-form">
+                <h2>Admin Login</h2>
+                
+                {% if error %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endif %}
+                
+                <form action="/admin/banned-ips" method="post">
+                    <div class="form-group">
+                        <label for="username">Benutzername:</label>
+                        <input type="text" id="username" name="username" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Passwort:</label>
+                        <input type="password" id="password" name="password" class="form-input" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-block">Anmelden</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

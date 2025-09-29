@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetamiTV - Admin Excel Viewer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --primary-bg: #0f0f13;
+            --secondary-bg: #1a1a22;
+            --card-bg: #23232e;
+            --accent-color: #8a2be2;
+            --accent-gradient: linear-gradient(135deg, #8a2be2, #4361ee);
+            --text-color: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --success-color: #4CAF50;
+            --error-color: #F44336;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 30px;
+            right: 0;
+            padding: 8px 15px;
+            background: rgba(244, 67, 54, 0.8);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(244, 67, 54, 1);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+        
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .login-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(15, 15, 19, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+        }
+        
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-gradient);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+        
+        .error-message {
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: rgba(244, 67, 54, 0.1);
+            border-left: 4px solid var(--error-color);
+            color: var(--text-color);
+        }
+        
+        .excel-container {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+        
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: var(--text-color);
+        }
+        
+        .excel-table th, .excel-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .excel-table th {
+            background-color: rgba(138, 43, 226, 0.2);
+            font-weight: 600;
+        }
+        
+        .excel-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .controls .btn {
+            width: auto;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .controls .btn i {
+            margin-right: 8px;
+        }
+        
+        .search-box {
+            padding: 10px 15px;
+            background-color: rgba(15, 15, 19, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-color);
+            width: 250px;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .pagination button {
+            padding: 8px 15px;
+            margin: 0 5px;
+            background-color: rgba(138, 43, 226, 0.2);
+            border: none;
+            border-radius: 5px;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination button:hover {
+            background-color: rgba(138, 43, 226, 0.4);
+        }
+        
+        .pagination button.active {
+            background-color: var(--accent-color);
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .admin-links {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .admin-link {
+            padding: 10px 20px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .admin-link:hover {
+            background-color: rgba(138, 43, 226, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .admin-link.active {
+            background-color: rgba(138, 43, 226, 0.2);
+            border-color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>NetamiTV Admin - Excel Viewer</h1>
+            {% if authenticated %}
+            <a href="/admin/logout" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Abmelden
+            </a>
+            {% endif %}
+        </header>        
+        
+        {% if authenticated %}
+        <div class="admin-links">
+            <a href="/admin/excel" class="admin-link active">
+                <i class="fas fa-table"></i> Excel Viewer
+            </a>
+            <a href="/admin/banned-ips" class="admin-link">
+                <i class="fas fa-ban"></i> IP Ban Management
+            </a>
+        </div>
+        
+        <div class="controls">
+            <input type="text" id="searchInput" class="search-box" placeholder="Suchen...">
+            <div>
+                <a href="/admin/excel/download" class="btn">
+                    <i class="fas fa-download"></i> Excel herunterladen
+                </a>
+                <button class="btn" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i> Aktualisieren
+                </button>
+            </div>
+        </div>
+            
+        <div class="excel-container">
+            <table class="excel-table" id="excelTable">
+                <thead>
+                    <tr>
+                        {% for header in headers %}
+                            <th>{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                        <tr>
+                            {% for cell in row %}
+                                <td>{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+            
+        <div class="pagination" id="pagination">
+            <!-- Pagination buttons will be added by JavaScript -->
+        </div>
+        {% else %}
+            <div class="login-form">
+                <h2>Admin Login</h2>
+                
+                {% if error %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endif %}
+                
+                <form action="/admin/excel" method="post">
+                    <div class="form-group">
+                        <label for="username">Benutzername:</label>
+                        <input type="text" id="username" name="username" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Passwort:</label>
+                        <input type="password" id="password" name="password" class="form-input" required>
+                    </div>
+                    
+                    <button type="submit" class="btn">Anmelden</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+    
+    {% if authenticated %}
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const excelTable = document.getElementById('excelTable');
+        const tableRows = Array.from(excelTable.querySelectorAll('tbody tr'));
+        const rowsPerPage = 10;
+        let currentPage = 1;
+        
+        // Refresh button
+        document.getElementById('refreshBtn').addEventListener('click', function() {
+            window.location.reload();
+        });
+        
+        // Search functionality
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            filterTable(searchTerm);
+        });
+        
+        function filterTable(searchTerm) {
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const display = text.includes(searchTerm) ? '' : 'none';
+                row.style.display = display;
+            });
+            
+            updatePagination();
+        }
+        
+        // Pagination
+        function setupPagination() {
+            const paginationElement = document.getElementById('pagination');
+            const pageCount = Math.ceil(tableRows.length / rowsPerPage);
+            
+            paginationElement.innerHTML = '';
+            
+            // Previous button
+            const prevButton = document.createElement('button');
+            prevButton.innerHTML = '&laquo;';
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    showPage(currentPage);
+                    updatePaginationButtons();
+                }
+            });
+            paginationElement.appendChild(prevButton);
+            
+            // Page buttons
+            for (let i = 1; i <= pageCount; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    showPage(currentPage);
+                    updatePaginationButtons();
+                });
+                paginationElement.appendChild(button);
+            }
+            
+            // Next button
+            const nextButton = document.createElement('button');
+            nextButton.innerHTML = '&raquo;';
+            nextButton.addEventListener('click', () => {
+                if (currentPage < pageCount) {
+                    currentPage++;
+                    showPage(currentPage);
+                    updatePaginationButtons();
+                }
+            });
+            paginationElement.appendChild(nextButton);
+            
+            updatePaginationButtons();
+            showPage(1);
+        }
+        
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            
+            tableRows.forEach((row, index) => {
+                row.style.display = (index >= start && index < end) ? '' : 'none';
+            });
+        }
+        
+        function updatePaginationButtons() {
+            const buttons = document.querySelectorAll('#pagination button');
+            buttons.forEach((button, index) => {
+                // Skip first and last buttons (prev/next)
+                if (index === 0 || index === buttons.length - 1) return;
+                
+                if (index === currentPage) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+            
+            // Update prev/next buttons
+            buttons[0].disabled = currentPage === 1;
+            buttons[buttons.length - 1].disabled = currentPage === buttons.length - 2;
+        }
+        
+        function updatePagination() {
+            const visibleRows = tableRows.filter(row => row.style.display !== 'none');
+            const pageCount = Math.ceil(visibleRows.length / rowsPerPage);
+            
+            // Update pagination buttons
+            const paginationElement = document.getElementById('pagination');
+            const buttons = paginationElement.querySelectorAll('button');
+            
+            // Remove all page number buttons (keep prev/next)
+            for (let i = buttons.length - 2; i > 0; i--) {
+                paginationElement.removeChild(buttons[i]);
+            }
+            
+            // Add new page number buttons
+            for (let i = pageCount; i >= 1; i--) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    showPage(currentPage);
+                    updatePaginationButtons();
+                });
+                
+                // Insert after prev button
+                paginationElement.insertBefore(button, buttons[1]);
+            }
+            
+            // Reset to first page
+            currentPage = 1;
+            showPage(currentPage);
+            updatePaginationButtons();
+        }
+        
+        // Initialize pagination
+        if (tableRows.length > 0) {
+            setupPagination();
+        }
+    </script>
+    {% endif %}
+</body>
+</html>
