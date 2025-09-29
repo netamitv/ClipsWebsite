@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetamiTV - Verifizierung</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --primary-bg: #0f0f13;
+            --secondary-bg: #1a1a22;
+            --card-bg: #23232e;
+            --accent-color: #8a2be2;
+            --accent-gradient: linear-gradient(135deg, #8a2be2, #4361ee);
+            --accent-gradient-alt: linear-gradient(135deg, #4361ee, #8a2be2);
+            --text-color: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --card-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            --hover-transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+            --neon-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+            --button-transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --twitch-purple: #9146FF;
+            --success-color: #4CAF50;
+            --error-color: #F44336;
+            --warning-color: #FF9800;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(67, 97, 238, 0.05) 0%, transparent 20%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-bar {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            background-color: rgba(35, 35, 46, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            z-index: 100;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            background: rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            transition: var(--button-transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-link:hover {
+            background: rgba(138, 43, 226, 0.2);
+            transform: translateY(-5px);
+            box-shadow: var(--neon-shadow);
+        }
+        
+        .nav-link i {
+            margin-right: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link:hover i {
+            transform: translateY(-2px) rotate(10deg);
+        }
+
+        .header {
+            text-align: center;
+            padding: 50px 0;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+        }
+        
+        .header h1 {
+            font-weight: 800;
+            letter-spacing: 3px;
+            position: relative;
+            display: inline-block;
+            font-size: 3rem;
+            text-transform: uppercase;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+        }
+
+        footer {
+            background-color: var(--secondary-bg);
+            padding: 60px 0 40px;
+            margin-top: 100px;
+            text-align: center;
+            position: relative;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            z-index: 10;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+        }
+
+        .footer-links {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0 15px;
+            display: inline-block;
+            padding: 10px 20px;
+            transition: all 0.4s ease;
+            position: relative;
+            font-weight: 500;
+            border-radius: 30px;
+            background-color: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+        }
+
+        .footer-links a:hover {
+            transform: translateY(-5px);
+            color: var(--text-color);
+            background-color: rgba(138, 43, 226, 0.1);
+            border-color: rgba(138, 43, 226, 0.3);
+            box-shadow: var(--neon-shadow);
+        }
+        
+        .footer-links a i {
+            margin-right: 8px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover i {
+            opacity: 1;
+            transform: translateY(-2px) rotate(5deg);
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            margin-top: 30px;
+            font-size: 0.9em;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .verification-card {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            padding: 40px;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .verification-card h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .verification-card p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+        
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: rgba(35, 35, 46, 0.7);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .user-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .user-info p {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--accent-gradient);
+            color: var(--text-color);
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            margin: 10px 0;
+            z-index: 20;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(138, 43, 226, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(138, 43, 226, 0.2);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(138, 43, 226, 0.3);
+        }
+        
+        .verification-status {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+            background-color: rgba(35, 35, 46, 0.7);
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .verification-status.success {
+            border-left-color: var(--success-color);
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+        
+        .verification-status.error {
+            border-left-color: var(--error-color);
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+        
+        .verification-status.warning {
+            border-left-color: var(--warning-color);
+            background-color: rgba(255, 152, 0, 0.1);
+        }
+        
+        .verification-status h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .verification-status h3 i {
+            margin-right: 10px;
+        }
+        
+        .cooldown-info {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(35, 35, 46, 0.5);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border: 1px solid rgba(138, 43, 226, 0.2);
+        }
+        
+        .cooldowns-container {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(35, 35, 46, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .cooldowns-container h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            text-align: center;
+        }
+        
+        .cooldown-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            background-color: rgba(138, 43, 226, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        .cooldown-item p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        
+        .connections-list {
+            list-style: none;
+            margin: 20px 0;
+            padding: 0;
+        }
+        
+        .connection-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: rgba(35, 35, 46, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--hover-transition);
+        }
+        
+        .connection-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--neon-shadow);
+        }
+        
+        .verified-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            background: var(--accent-gradient);
+            color: var(--text-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .verification-forms {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .form-container {
+            background-color: rgba(35, 35, 46, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--hover-transition);
+        }
+        
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--neon-shadow);
+        }
+        
+        .form-container h4 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .form-container h4::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-gradient);
+            transform: scaleX(0.7);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+        
+        .form-container:hover h4::after {
+            transform: scaleX(1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(15, 15, 19, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+        }
+        
+        .info-box {
+            background-color: rgba(35, 35, 46, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .info-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+        
+        .info-box ol {
+            padding-left: 20px;
+            color: var(--text-secondary);
+        }
+        
+        .info-box li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 5px;
+        }
+        
+        .info-box li::marker {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.03), transparent 50%);
+            opacity: 0.5;
+            z-index: -2;
+            animation: bg-pulse 10s infinite alternate;
+        }
+        
+        @keyframes bg-pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0.3; }
+        }
+        
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(145, 70, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(145, 70, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -2;
+            animation: grid-move 20s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        
+        .loading-spinner {
+            width: 100px;
+            height: 100px;
+            border: 5px solid transparent;
+            border-top: 5px solid var(--accent-color);
+            border-right: 5px solid var(--twitch-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .countdown {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: rgba(138, 43, 226, 0.2);
+            border-radius: 5px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .verification-card {
+                padding: 25px;
+            }
+            
+            .nav-links {
+                gap: 10px;
+            }
+            
+            .nav-link {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .verification-forms {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--primary-bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(var(--accent-color), #4361ee);
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="animated-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="container" id="verification">
+        <nav class="nav-bar">
+            <div class="nav-links">
+                <a href="/" class="nav-link"><i class="fas fa-home"></i>Website</a>
+                <a href="/tutorial/" class="nav-link"><i class="fas fa-video"></i>Tutorial</a>
+                <a href="/upload/" class="nav-link"><i class="fas fa-upload"></i>Hochladen</a>
+                <a href="/format-ideas/" class="nav-link"><i class="fas fa-lightbulb"></i>Format Ideen</a>
+                <a href="/monetization/" class="nav-link"><i class="fas fa-money-bill-wave"></i>Geld</a>
+                <a href="/verification/" class="nav-link"><i class="fas fa-check-circle"></i>Verifizierung</a>
+            </div>
+        </nav>                     
+        
+        <header class="header">
+            <h1>Verifizierung</h1>
+        </header>
+
+        {% if not logged_in %}
+            <div class="verification-card">
+                <h2>Mit Discord anmelden</h2>
+                <p>Um deine Social-Media-Konten zu verifizieren, melde dich bitte zuerst mit deinem Discord-Account an.</p>
+                
+                {% if discord_blocked_until %}
+                    <div class="verification-status warning">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Anmeldung vorübergehend nicht verfügbar</h3>
+                        <p>Die Discord-Anmeldung ist aufgrund von API-Beschränkungen vorübergehend nicht verfügbar.</p>
+                        <p>Bitte versuche es in etwa {{ discord_blocked_until.minutes }} Minuten und {{ discord_blocked_until.seconds }} Sekunden erneut (um {{ discord_blocked_until.time }} Uhr).</p>
+                    </div>
+                {% else %}
+                    <a href="/auth/discord/login" class="btn">Mit Discord anmelden</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="verification-card">
+                <div class="user-info">
+                    <h3>{{ user.username }}</h3>
+                    <p>Discord ID: {{ user.id }}</p>
+                    <a href="/auth/logout" class="btn btn-secondary">Abmelden</a>
+                </div>
+                
+                {% if verification_status %}
+                    <div class="verification-status {% if verification_status.success %}success{% else %}error{% endif %}">
+                        <h3>
+                            {% if verification_status.success %}
+                                <i class="fas fa-check-circle"></i> Erfolg
+                            {% else %}
+                                <i class="fas fa-exclamation-circle"></i> Fehler
+                            {% endif %}
+                        </h3>
+                        <p>{{ verification_status.message }}</p>
+                        
+                        {% if verification_status.cooldown %}
+                            <div class="cooldown-info">
+                                <p>Nächster Versuch möglich in: {{ verification_status.cooldown.remaining_hours }} Stunden und {{ verification_status.cooldown.remaining_minutes }} Minuten</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                
+                {% if cooldowns and cooldowns|length > 0 %}
+                    <div class="cooldowns-container">
+                        <h3><i class="fas fa-clock"></i> Aktive Cooldowns</h3>
+                        {% for platform, cooldown in cooldowns.items() %}
+                            <div class="cooldown-item">
+                                <p><strong>{{ platform|capitalize }}:</strong> Nächster Versuch in {{ cooldown.remaining_hours }} Stunden und {{ cooldown.remaining_minutes }} Minuten möglich</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <h2>Deine verknüpften Konten:</h2>
+                
+                {% if session.connections %}
+                <ul class="connections-list">
+                    {% for connection in session.connections %}
+                        <li class="connection-item">
+                            <strong>{{ connection.type|capitalize }}:</strong> {{ connection.name }}
+                            {% if connection.verified %}
+                                <span class="verified-badge">Verifiziert</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+                <div class="verification-forms">
+                    <div class="form-container">
+                        <h4>YouTube Video verifizieren</h4>
+                        <form action="/verify-video" method="post">
+                            <input type="hidden" name="platform" value="youtube">
+                            <div class="form-group">
+                                <label for="youtube-link">YouTube Video-Link:</label>
+                                <input type="text" id="youtube-link" name="video_link" placeholder="https://www.youtube.com/watch?v=..." required class="form-input">
+                            </div>
+                            <button type="submit" class="btn" {% if cooldowns and 'youtube' in cooldowns %}disabled{% endif %}>
+                                {% if cooldowns and 'youtube' in cooldowns %}
+                                    Cooldown aktiv
+                                {% else %}
+                                    Verifizieren
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="form-container">
+                        <h4>TikTok Video verifizieren</h4>
+                        <form action="/verify-video" method="post">
+                            <input type="hidden" name="platform" value="tiktok">
+                            <div class="form-group">
+                                <label for="tiktok-link">TikTok Video-Link:</label>
+                                <input type="text" id="tiktok-link" name="video_link" placeholder="https://www.tiktok.com/@username/video/..." required class="form-input">
+                            </div>
+                            <button type="submit" class="btn" {% if cooldowns and 'tiktok' in cooldowns %}disabled{% endif %}>
+                                {% if cooldowns and 'tiktok' in cooldowns %}
+                                    Cooldown aktiv
+                                {% else %}
+                                    Verifizieren
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <p>Du hast keine Accounts mit deinem Discord-Profil verbunden. Um deine Accounts zu verifizieren, verbinde bitte deine TikTok- oder YouTube-Accounts in deinen Discord-Einstellungen.</p>
+                <div class="info-box">
+                    <h3>So verbindest du deine Accounts:</h3>
+                    <ol>
+                        <li>Öffne Discord und gehe zu deinen Benutzereinstellungen</li>
+                        <li>Klicke auf "Verbindungen"</li>
+                        <li>Wähle die Plattform aus, die du verbinden möchtest (TikTok oder YouTube)</li>
+                        <li>Folge den Anweisungen, um dein Konto zu verbinden</li>
+                        <li>Kehre zu dieser Seite zurück und melde dich erneut an</li>
+                    </ol>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<footer>
+    <div class="footer-links">
+        <a href="/about/"><i class="fas fa-info-circle"></i>About Us</a>
+        <a href="/contact/"><i class="fas fa-envelope"></i>Contact</a>
+        <a href="/terms/"><i class="fas fa-file-contract"></i>Terms of Service</a>
+        <a href="/privacy/"><i class="fas fa-shield-alt"></i>Privacy Policy</a>
+    </div>                   
+    <div class="copyright">
+        &copy; 2025 NetamiTV Clips. All rights reserved.
+    </div>
+</footer>
+
+<script>
+    window.addEventListener('load', function() {
+        const loadingOverlay = document.getElementById('loading-overlay');
+        setTimeout(function() {
+            loadingOverlay.style.opacity = '0';
+            setTimeout(function() {
+                loadingOverlay.style.display = 'none';
+            }, 500);
+        }, 1000);
+    });
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const cooldownButtons = document.querySelectorAll('button[disabled]');
+        cooldownButtons.forEach(button => {
+            button.style.opacity = '0.6';
+            button.style.cursor = 'not-allowed';
+        });
+    });
+    
+    const buttons = document.querySelectorAll('.btn:not([disabled])');
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const x = e.clientX - e.target.getBoundingClientRect().left;
+            const y = e.clientY - e.target.getBoundingClientRect().top;
+            
+            const ripple = document.createElement('span');
+            ripple.style.position = 'absolute';
+            ripple.style.width = '1px';
+            ripple.style.height = '1px';
+            ripple.style.borderRadius = '50%';
+            ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            ripple.style.animation = 'ripple 0.6s linear';
+            ripple.style.pointerEvents = 'none';
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+    
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes ripple {
+            to {
+                transform: scale(100);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    const discordBlockedUntilElement = document.querySelector('.verification-status.warning');
+    if (discordBlockedUntilElement) {
+        const minutesElement = discordBlockedUntilElement.querySelector('p:nth-child(2)');
+        if (minutesElement) {
+            const timeText = minutesElement.textContent;
+            const minutesMatch = timeText.match(/(\d+) Minuten und (\d+) Sekunden/);
+            
+            if (minutesMatch) {
+                let minutes = parseInt(minutesMatch[1]);
+                let seconds = parseInt(minutesMatch[2]);
+                let totalSeconds = minutes * 60 + seconds;
+                
+                const countdownInterval = setInterval(() => {
+                    totalSeconds--;
+                    
+                    if (totalSeconds <= 0) {
+                        clearInterval(countdownInterval);
+                        location.reload();
+                        return;
+                    }
+                    
+                    minutes = Math.floor(totalSeconds / 60);
+                    seconds = totalSeconds % 60;
+                    
+                    minutesElement.textContent = `Bitte versuche es in etwa ${minutes} Minuten und ${seconds} Sekunden erneut.`;
+                }, 1000);
+            }
+        }
+    }
+    
+    const verificationStatus = document.querySelector('.verification-status');
+    if (verificationStatus) {
+        verificationStatus.style.animation = 'fadeIn 0.5s ease-in-out';
+        
+        const fadeInStyle = document.createElement('style');
+        fadeInStyle.innerHTML = `
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(fadeInStyle);
+    }
+</script>
+</body>
+
+</html>

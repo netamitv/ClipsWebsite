@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetamiTV - Mobile Tutorial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --primary-bg: #0f0f13;
+            --secondary-bg: #1a1a22;
+            --card-bg: #23232e;
+            --accent-color: #8a2be2;
+            --accent-gradient: linear-gradient(135deg, #8a2be2, #4361ee);
+            --accent-gradient-alt: linear-gradient(135deg, #4361ee, #8a2be2);
+            --text-color: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --card-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            --hover-transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+            --neon-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+            --button-transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --twitch-purple: #9146FF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(67, 97, 238, 0.05) 0%, transparent 20%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-bar {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            background-color: rgba(35, 35, 46, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            z-index: 100;
+            transform-style: preserve-3d;
+            animation: nav-float 6s ease-in-out infinite;
+        }
+        
+        @keyframes nav-float {
+            0%, 100% { transform: translateY(0) rotateX(1deg); }
+            50% { transform: translateY(-10px) rotateX(-1deg); }
+        }
+        
+        .nav-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(138, 43, 226, 0.05), 
+                transparent);
+            transform: translateX(-100%);
+            animation: nav-shine 8s infinite;
+        }
+        
+        @keyframes nav-shine {
+            0% { transform: translateX(-100%); }
+            20%, 100% { transform: translateX(100%); }
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            background: rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            transition: var(--button-transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+        
+        .nav-link:hover, .nav-link:active {
+            background: rgba(138, 43, 226, 0.2);
+            transform: translateY(-3px);
+            box-shadow: var(--neon-shadow);
+        }
+        
+        .nav-link i {
+            margin-right: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+        }
+        
+        .header h1 {
+            font-weight: 800;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            animation: pulse 3s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% {
+                filter: brightness(1);
+            }
+            100% {
+                filter: brightness(1.3);
+            }
+        }
+
+        .tutorial-container {
+            max-width: 100%;
+            margin: 0 auto 30px;
+            padding: 25px;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+            animation: welcome-intro 1.2s forwards cubic-bezier(0.2, 1, 0.3, 1);
+        }
+        
+        @keyframes welcome-intro {
+            0% { 
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            100% { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .tutorial-container::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(138, 43, 226, 0.1), 
+                transparent);
+            transform: rotate(45deg);
+            transition: all 1s ease;
+            z-index: -1;
+            animation: welcome-shine 8s infinite;
+        }
+        
+        @keyframes welcome-shine {
+            0% { transform: rotate(45deg) translateX(-100%); }
+            50%, 100% { transform: rotate(45deg) translateX(100%); }
+        }
+        
+        .tutorial-section {
+            margin-bottom: 30px;
+        }
+        
+        .tutorial-section h2 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tutorial-section p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        .tutorial-image {
+            width: 100%;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .device-indicator {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: bold;
+            box-shadow: var(--neon-shadow);
+            animation: float 3s infinite alternate ease-in-out;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+        
+        .mobile-tip {
+            background-color: rgba(138, 43, 226, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .mobile-tip h3 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+        
+        .mobile-tip h3 i {
+            margin-right: 10px;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            text-align: center;
+            margin-right: 10px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(138, 43, 226, 0.3);
+            font-size: 0.9rem;
+        }
+
+        /* YouTube Video Section */
+        .video-section {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: var(--secondary-bg);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .video-section h2 {
+            color: var(--accent-color);
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin: 15px 0 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .video-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .video-item {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: var(--hover-transition);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 15px;
+        }
+
+        .video-item:active {
+            transform: scale(0.98);
+        }
+
+        footer {
+            background-color: var(--secondary-bg);
+            padding: 40px 0 30px;
+            margin-top: 60px;
+            text-align: center;
+            position: relative;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            z-index: 10;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+        }
+
+        .footer-links {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 5px;
+            display: inline-block;
+            padding: 8px 15px;
+            transition: all 0.4s ease;
+            position: relative;
+            font-weight: 500;
+            border-radius: 30px;
+            background-color: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links a:active {
+            transform: scale(0.95);
+            background-color: rgba(138, 43, 226, 0.1);
+            border-color: rgba(138, 43, 226, 0.3);
+            box-shadow: var(--neon-shadow);
+        }
+        
+        .footer-links a i {
+            margin-right: 6px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            margin-top: 20px;
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+        
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.03), transparent 50%);
+            opacity: 0.5;
+            z-index: -2;
+            animation: bg-pulse 10s infinite alternate;
+        }
+        
+        @keyframes bg-pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0.3; }
+        }
+        
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(145, 70, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(145, 70, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -2;
+            animation: grid-move 20s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="container">
+        <nav class="nav-bar">
+            <div class="nav-links">
+                <a href="/" class="nav-link"><i class="fas fa-home"></i>Website</a>
+                <a href="/tutorial/" class="nav-link active"><i class="fas fa-video"></i>Tutorial</a>
+                <a href="/upload/" class="nav-link"><i class="fas fa-upload"></i>Hochladen</a>
+                <a href="/format-ideas/" class="nav-link"><i class="fas fa-lightbulb"></i>Ideen</a>
+                <a href="/monetization/" class="nav-link"><i class="fas fa-money-bill-wave"></i>Geld</a>
+                <a href="/verification/" class="nav-link"><i class="fas fa-check-circle"></i>Verifizierung</a>
+            </div>
+        </nav>
+        
+        <header class="header">
+            <h1>Mobile Tutorial</h1>
+            <div class="device-indicator">
+                <i class="fas fa-mobile-alt"></i> Smartphone Version
+            </div>
+        </header>
+        
+        <div class="tutorial-container">
+            <div class="tutorial-section">
+                <h2>Willkommen zum Mobile Tutorial</h2>
+                <p>Hier findest du eine Anleitung, wie du NetamiTV auf deinem Smartphone optimal nutzen kannst. Unsere mobile Version wurde speziell für unterwegs optimiert.</p>
+                
+                <div class="mobile-tip">
+                    <h3><i class="fas fa-lightbulb"></i> Mobile Tipp</h3>
+                    <p>Für die beste Erfahrung empfehlen wir dir, die neueste Version der App zu installieren und eine stabile Internetverbindung zu nutzen.</p>
+                </div>
+            </div>
+            
+            <div class="video-section">
+                <h2>Video Tutorials</h2>
+                
+                <div class="video-grid">
+                    <div class="video-item">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/4ljdxeTPIF8" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+                        <h3 class="video-title">CapCut Guide Handy</h3>
+                        <p class="video-description">
+                            Hier lernst du, wie du mit CapCut Handy effizient und professionell Videos schneidest.
+                        </p>
+                    </div>
+            </div>
+            
+            <div class="tutorial-section">
+                <h2>Mobile Funktionen</h2>
+                <p>Die mobile Version bietet dir spezielle Funktionen für unterwegs:</p>
+                
+                <ul style="margin-left: 20px; margin-bottom: 20px; color: var(--text-secondary);">
+                    <li>Schnelles Aufnehmen und Teilen</li>
+                    <li>Offline-Bearbeitung</li>
+                    <li>Batterieschonender Modus</li>
+                    <li>Mobil optimierte Uploads</li>
+                    <li>Push-Benachrichtigungen</li>
+                </ul>
+                
+                <img src="https://via.placeholder.com/600x400" alt="Mobile Features Screenshot" class="tutorial-image">
+                
+                <div class="mobile-tip">
+                    <h3><i class="fas fa-battery-full"></i> Akku-Tipp</h3>
+                    <p>Um Akku zu sparen während du die App nutzt:</p>
+                    <ul style="list-style-type: none; margin-left: 10px;">
+                        <li>• Aktiviere den Energiesparmodus in der App</li>
+                        <li>• Reduziere die Videoqualität beim Streamen</li>
+                        <li>• Schließe andere Apps im Hintergrund</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tutorial-section">
+                <h2>Weitere Hilfe</h2>
+                <p>Wenn du weitere Hilfe benötigst, besuche unser Hilfezentrum oder kontaktiere unseren Support direkt aus der App.</p>
+                <p>Du kannst auch zur Desktop-Version wechseln, indem du <a href="/tutorial/pc.html" style="color: var(--accent-color);">hier klickst</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="/about/"><i class="fas fa-info-circle"></i>About</a>
+            <a href="/contact/"><i class="fas fa-envelope"></i>Contact</a>
+            <a href="/terms/"><i class="fas fa-file-contract"></i>Terms</a>
+            <a href="/privacy/"><i class="fas fa-shield-alt"></i>Privacy</a>
+        </div>                   
+        <div class="copyright">
+            &copy; 2025 NetamiTV Clips. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        const videoItems = document.querySelectorAll('.video-item');
+        
+        videoItems.forEach(item => {
+            item.addEventListener('touchstart', () => {
+                item.style.transform = 'scale(0.98)';
+                item.style.opacity = '0.9';
+            });
+            
+            item.addEventListener('touchend', () => {
+                item.style.transform = 'scale(1)';
+                item.style.opacity = '1';
+            });
+        });
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        document.addEventListener('touchstart', (e) => {
+            if (e.target.classList.contains('nav-link') || 
+                e.target.classList.contains('video-item')) {
+                
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                ripple.style.position = 'absolute';
+                ripple.style.width = '2px';
+                ripple.style.height = '2px';
+                ripple.style.borderRadius = '50%';
+                ripple.style.backgroundColor = 'var(--accent-color)';
+                ripple.style.boxShadow = '0 0 10px var(--accent-color)';
+                
+                const rect = e.target.getBoundingClientRect();
+                const x = e.touches[0].clientX - rect.left;
+                const y = e.touches[0].clientY - rect.top;
+                
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                ripple.style.transform = 'scale(0)';
+                ripple.style.opacity = '1';
+                ripple.style.transition = 'transform 0.6s ease-out, opacity 0.6s ease-out';
+                ripple.style.zIndex = '9999';
+                
+                e.target.style.position = 'relative';
+                e.target.style.overflow = 'hidden';
+                e.target.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.style.transform = 'scale(100)';
+                    ripple.style.opacity = '0';
+                }, 10);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            }
+        }, { passive: true });
+    </script>
+</body>
+
+</html>

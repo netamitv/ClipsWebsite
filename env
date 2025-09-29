@@ -1,0 +1,4 @@
+# SSL-Konfiguration
+USE_SSL=true
+SSL_CERT_PATH=cert.pem
+SSL_KEY_PATH=key.pem
